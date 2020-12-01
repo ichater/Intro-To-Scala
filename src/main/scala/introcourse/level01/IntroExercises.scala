@@ -3,7 +3,7 @@ package introcourse.level01
 /**
   * Level 1 focuses on basic Scala, including syntax and especially programming with functions.
   * We will go through a few exercises to familiarise ourselves with writing Scala.
-  *
+  *sdf
   * What's a function?
   *
   * A function takes inputs and returns an output.
