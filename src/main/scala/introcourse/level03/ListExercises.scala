@@ -147,8 +147,7 @@ object ListExercises {
     *
     * Hint: Use .foldLeft
     */
-  def product(nums: List[Int]): Int = ???
-
+  def product(nums: List[Int]): Int = nums.foldLeft(1)((acc, cur) => acc * cur)
   /**
     * scala> min(List(4, 6, 1))
     * > 1
@@ -160,8 +159,12 @@ object ListExercises {
     **/
   def min(nums: List[Int]): Int =
     nums match {
-      case Nil => ???
-      case head :: tail => ???
+      case Nil => Integer.MIN_VALUE
+      case head :: tail => tail.foldLeft(head)((acc, cur) =>
+        if (acc > cur) {
+          cur
+        } else acc
+      )
     }
 
   private[level03] val peopleList =
@@ -185,7 +188,15 @@ object ListExercises {
     *
     * Hint: Use pattern matching and .foldLeft
     */
-  def youngestPerson(persons: List[Person]): Person = ???
+  def youngestPerson(persons: List[Person]): Person = 
+    persons match {
+      case Nil => Person("Nobody", 0)
+      case head :: tail => tail.foldLeft(head)((acc, cur) =>
+        if (acc.age <= cur.age) {
+          acc
+        } else acc
+      )
+    }
 
   /**
     * Return a list of pairs of a Person and their position in the `peopleList`.
@@ -207,7 +218,9 @@ object ListExercises {
     *
     * Hint: Use `zipWithIndex`
     */
-  def personWithIndex(people: List[Person]): List[(Person, Int)] = ???
+  def personWithIndex(people: List[Person]): List[(Person, Int)] = people.zipWithIndex.map{
+      case (person, index) => (person, index + 1)
+    }
 
   /**
     * Log every nth person from the `peopleList` given an index `n`.
@@ -223,8 +236,21 @@ object ListExercises {
     * Hint: Use `personWithIndex`, `filter` and `showPerson`.
     *
     */
-  def showEveryNthPerson(n: Int, persons: List[Person]): List[String] = ???
-
+  def showEveryNthPerson(n: Int, persons: List[Person]): List[String] = {
+  if(n <= 0){ 
+    persons.map(showPerson)
+  }
+  else if( n > persons.length){
+   Nil
+  }
+  else{
+      val filteredPersons: List[(Person, Int)] =
+        personWithIndex(persons).filter {
+          case (_, index) => index % n == 0
+        }
+      filteredPersons.map { case (person, index) => showPerson(person) }
+    }
+  }
   private[level03] def showPerson(person: Person): String =
     person match {
       case Person(a, b) => s"$a is $b years old"
