@@ -39,8 +39,12 @@ object ListExercises {
     *
     * Hint: Refer the construction of list
     */
+
+
   def prependToList[A](x: A, xs: List[A]): List[A] = x :: xs
 
+  val a: List[Int] = prependToList(1, List(2))
+  val b: List[String] = prependToList[String]("a", List("b"))
   /**
     * scala> appendToList(1, List(2, 3, 4))
     * > List(2,3,4,1)
