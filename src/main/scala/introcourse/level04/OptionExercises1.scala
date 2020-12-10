@@ -35,7 +35,10 @@ object OptionExercises1 {
     * scala> 5 / 2.toDouble
     * > 2.5
     **/
-  def safeMean(nums: List[Int]): Option[Double] = ???
+  def safeMean(nums: List[Int]): Option[Double] =  {
+    if (nums.isEmpty) None
+    else Some(nums.sum / nums.length.toDouble)
+  }
 
   /**
     * Safe constructors
@@ -58,7 +61,12 @@ object OptionExercises1 {
     *
     * Hint: Use pattern matching
     **/
-  def mkTrafficLight(str: String): Option[TrafficLight] = ???
+  def mkTrafficLight(str: String): Option[TrafficLight] = str match {
+      case "red" => Some(Red)
+      case "Yellow" => Some(Yellow)
+      case "Green" => Some(Green)
+      case _ => None
+
 
   /**
     * scala> mkTrafficLightThenShow("red")
@@ -84,7 +92,19 @@ object OptionExercises1 {
     * }
     * ```
     */
-  def mkTrafficLightThenShow(str: String): String = ???
+  def mkTrafficLightThenShow(str: String): String = {
+   val string = mkTrafficLight(srt)
+    def stringToSentence(str2:String):String = {
+      s"The Traffic Light is ${str2}"
+    }
+    string match{
+      case Some(Red) => stringToSentence(str)
+      case Some(Yellow) => stringToSentence(str)
+      case Some(Green) => stringToSentence(str)
+      case _ => s"Traffic light ${_} is invalid"
+    }
+  }
+  }
 
   /**
     * scala> mkPerson("Bob", 20)
@@ -102,7 +122,9 @@ object OptionExercises1 {
     *
     * Hint: Don't forget every if needs an else!
     **/
-  def mkPerson(name: String, age: Int): Option[Person] = ???
+  def mkPerson(name: String, age: Int): Option[Person] =
+    if(name.isEmpty| age <0) None
+    else Some(Person(name, age))
 
   /**
     * scala> mkPersonThenChangeName("Bob", 20, "John")
@@ -116,6 +138,12 @@ object OptionExercises1 {
     *
     * Hint: Use `mkPerson` and pattern matching
     **/
-  def mkPersonThenChangeName(oldName: String, age: Int, newName: String): Option[Person] = ???
+  def mkPersonThenChangeName(oldName: String, age: Int, newName: String): Option[Person] = {
+    val newPerson: Option[Person] = mkPerson(newName, age)
+    newPerson match {
+      case some(newPerson)  => newPerson
+      case  None => None
+    }
+  }
 
 }

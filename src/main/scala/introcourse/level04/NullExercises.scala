@@ -82,12 +82,9 @@ object NullExercises {
     * > null
     **/
   def mkPersonOrNull(name: String, age: Int): Person = {
-    if(name == "" || age < 0){
-      null
-    } else {
-      Person( name, age)
-    }
-  }
+    if(name == "" || age < 0) null
+    else Person( name, age)
+
 
   /**
     * scala> mkPersonOrNullThenChangeName("Bob", 20, "John")
