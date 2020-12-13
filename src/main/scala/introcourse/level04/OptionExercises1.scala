@@ -141,7 +141,7 @@ object OptionExercises1 {
   def mkPersonThenChangeName(oldName: String, age: Int, newName: String): Option[Person] = {
     val newPerson: Option[Person] = mkPerson(newName, age)
     newPerson match {
-      case some(newPerson)  => newPerson
+      case Some(newPerson)  => newPerson
       case  None => None
     }
   }

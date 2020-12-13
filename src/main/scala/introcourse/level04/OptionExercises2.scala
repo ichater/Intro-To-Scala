@@ -39,7 +39,8 @@ object OptionExercises2 {
     *
     * Hint: Use `get` method on `humansDatabase` Map
     **/
-  def findHumanById(humanId: HumanId): Option[Human] = ???
+  def findHumanById(humanId: HumanId): Option[Human] = humansDatabase.get(humanId)
+
 
   /**
     * scala> findJobById(1)
@@ -50,7 +51,7 @@ object OptionExercises2 {
     *
     * Hint: Use `get` method on `jobsDatabase` Map
     **/
-  def findJobById(jobId: JobId): Option[Job] = ???
+  def findJobById(jobId: JobId): Option[Job] = jobsDatabase.get(jobId)
 
   /**
     * scala> findJobDescriptionGivenJobId1(1)
@@ -61,7 +62,13 @@ object OptionExercises2 {
     *
     * Hint: Use `findJobById` and then pattern match
     */
-  def findJobDescriptionGivenJobId1(jobId: JobId): Option[String] = ???
+  def findJobDescriptionGivenJobId1(jobId: JobId): Option[String] = {
+    val maybeJob = jobsDatabase.get(jobId)
+    maybeJob match {
+      case Some(value) => Some(value.description)
+      case None => None
+    }
+  }
 
   /**
     * Same as above, but use .map instead
@@ -82,7 +89,9 @@ object OptionExercises2 {
     * optSomething.map(a => s"Got some $a")
     * ```
     */
-  def findJobDescriptionGivenJobId2(jobId: JobId): Option[String] = ???
+  def findJobDescriptionGivenJobId2(jobId: JobId): Option[String] = {
+    findJobById(jobId).map(_.description)
+  }
 
   /**
     * scala> findJobDescriptionGivenJobIdOrElse1(1)
@@ -93,12 +102,21 @@ object OptionExercises2 {
     *
     * Hint: Use `findJobDescriptionGivenJobId1` then pattern match
     */
-  def findJobDescriptionGivenJobIdOrElse1(jobId: JobId): String = ???
+  def findJobDescriptionGivenJobIdOrElse1(jobId: JobId): String = {
+
+    findJobDescriptionGivenJobId2(jobId) match{
+      case Some(description) => description
+      case _ => s"Job with id ${jobId} does not exist"
+    }
+  }
 
   /**
     * Same as above, but use `findJobDescriptionGivenJobId1` then `getOrElse`
     */
-  def findJobDescriptionGivenJobIdOrElse2(jobId: JobId): String = ???
+  def findJobDescriptionGivenJobIdOrElse2(jobId: JobId): String = {
+    findJobDescriptionGivenJobId1(jobId).getOrElse(s"Job with id $jobId does not exist")
+  }
+
 
   /**
     * scala> findJobIdByHumanId(1)
@@ -111,7 +129,11 @@ object OptionExercises2 {
     *
     * What's the type that you get after using `map`? What's different between that and the function's return type?
     */
-  def findJobIdByHumanId(humanId: HumanId): Option[JobId] = ???
+  def findJobIdByHumanId(humanId: HumanId): Option[JobId] = {
+    val jobId: Option[JobId] = findHumanById(humanId).map(human => human.optJobId).flatten
+
+    findHumanById(humanId).flatMap(human => human.optJobId)
+  }
 
   /**
     * scala> findJobByHumanId(2)
@@ -119,7 +141,16 @@ object OptionExercises2 {
     *
     * Hint: Use `findJobIdByHumanId` and `findJobById`
     */
-  def findJobByHumanId(humanId: HumanId): Option[Job] = ???
+  def findJobByHumanId(humanId: HumanId): Option[Job] = {
+    val maybeJobId: Option[JobId] = findJobIdByHumanId(humanId)
+
+    val maybeJob: Option[Job] = maybeJobId match {
+      case Some(jobId) => findJobById(jobId)
+      case None => None
+    }
+
+    findJobIdByHumanId(humanId).flatMap(findJobById)
+  }
 
   /**
     * Find the name of the `Job` that this `humanId` has
